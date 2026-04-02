@@ -1,0 +1,21 @@
+<%- include('partials/header', { title, query }) %>
+<main class="layout single">
+  <section class="content">
+    <div class="card">
+      <h2>搜索</h2>
+      <% if (!query) { %>
+        <p class="meta">输入关键词搜索文章。</p>
+      <% } else if (posts.length === 0) { %>
+        <p class="meta">未找到“<%= query %>”的结果。</p>
+      <% } else { %>
+        <% posts.forEach((post) => { %>
+          <div style="margin: 12px 0;">
+            <a href="/post/<%= post.slug %>"><%= post.title %></a>
+            <div class="meta"><%= post.excerpt %></div>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>

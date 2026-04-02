@@ -1,0 +1,27 @@
+<aside class="sidebar">
+  <div class="card">
+    <h3>分类</h3>
+    <% if (categories && categories.length) { %>
+      <div class="tag-cloud">
+        <% categories.forEach((category) => { %>
+          <a class="tag" href="/category/<%= category.slug %>"><%= category.name %> (<%= category.post_count %>)</a>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="meta">还没有分类。</div>
+    <% } %>
+  </div>
+
+  <div class="card" style="margin-top: 18px;">
+    <h3>标签</h3>
+    <% if (tags && tags.length) { %>
+      <div class="tag-cloud">
+        <% tags.forEach((tag) => { %>
+          <a class="tag" href="/tag/<%= tag.slug %>"><%= tag.name %> (<%= tag.post_count %>)</a>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="meta">还没有标签。</div>
+    <% } %>
+  </div>
+</aside>

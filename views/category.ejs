@@ -1,0 +1,66 @@
+<%- include('partials/header', { title }) %>
+<main class="layout single">
+  <section class="content">
+    <div class="card" style="margin-bottom: 18px;">
+      <h2><%= category.name %></h2>
+      <% if (posts.length === 0) { %>
+        <p>该分类暂无文章。</p>
+      <% } %>
+    </div>
+    <div class="post-list">
+      <% posts.forEach((post) => { %>
+        <article class="card">
+          <h2 class="post-title"><a href="/post/<%= post.slug %>"><%= post.title %></a></h2>
+          <p><%= post.excerpt %></p>
+          <div class="meta-line">
+            <span class="meta-item" title="发布时间：<%= post.created_at.slice(0, 10) %>">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 7v6l4 2"></path>
+              </svg>
+              <span><%= post.created_at.slice(0, 10) %></span>
+            </span>
+            <span class="meta-item" title="分类：<%= post.category_name ? post.category_name : '无' %>">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 7h7l2 2h9v8a2 2 0 0 1-2 2H3z"></path>
+                <path d="M3 7V5a2 2 0 0 1 2-2h4l2 2"></path>
+              </svg>
+            </span>
+            <span class="meta-item" title="标签：<%= post.tags.length ? post.tags.map((tag) => tag.name).join('、') : '无' %>">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 10V6a2 2 0 0 1 2-2h4"></path>
+                <path d="M4 10l10 10 6-6L10 4H6a2 2 0 0 0-2 2z"></path>
+              </svg>
+            </span>
+            <span class="meta-item" title="阅读 <%= post.read_count || 0 %>">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <span><%= post.read_count || 0 %></span>
+            </span>
+            <span class="meta-item" title="评论 <%= post.comment_count || 0 %>">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 5h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"></path>
+              </svg>
+              <span><%= post.comment_count || 0 %></span>
+            </span>
+            <span class="meta-item" title="点赞 <%= post.like_count || 0 %>">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 21s-6.5-4.2-9-7.5A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9 7.5C18.5 16.8 12 21 12 21z"></path>
+              </svg>
+              <span><%= post.like_count || 0 %></span>
+            </span>
+            <span class="meta-item" title="收藏 <%= post.favorite_count || 0 %>">
+              <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"></path>
+              </svg>
+              <span><%= post.favorite_count || 0 %></span>
+            </span>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>

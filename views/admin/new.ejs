@@ -1,0 +1,46 @@
+<%- include('../partials/header', { title }) %>
+<main class="layout single">
+  <section class="content">
+    <form action="/admin/posts" method="post" class="admin-form">
+      <div class="card">
+        <h2 class="admin-section-title">新建文章</h2>
+        <div class="field">
+          <label for="title">标题</label>
+          <input id="title" type="text" name="title" placeholder="文章标题" required />
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="category">分类</label>
+            <input id="category" type="text" name="category" placeholder="例如：随笔" />
+          </div>
+          <div class="field">
+            <label for="tags">标签</label>
+            <input id="tags" type="text" name="tags" placeholder="多个标签用逗号分隔" />
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="editor-shell">
+          <div class="editor-panel-title">正文（Markdown）</div>
+          <div class="editor-toolbar">
+            <label class="button ghost" for="image-upload">插入图片</label>
+            <input id="image-upload" type="file" accept="image/*" hidden />
+            <span class="meta">支持拖拽或选择图片，自动生成 Markdown</span>
+          </div>
+          <div class="editor compact">
+            <textarea name="content" id="content" placeholder="使用 Markdown 编写" required></textarea>
+            <div class="preview" id="preview"></div>
+          </div>
+        </div>
+        <button class="primary" type="submit">发布</button>
+      </div>
+    </form>
+  </section>
+</main>
+<script src="/static/vendor/marked.min.js"></script>
+<script src="/static/vendor/katex.min.js"></script>
+<script src="/static/vendor/katex-auto-render.min.js"></script>
+<script src="/static/vendor/highlight.min.js"></script>
+<script src="/static/js/content-enhance.js"></script>
+<script src="/static/js/editor.js"></script>
+<%- include('../partials/footer') %>

@@ -1,0 +1,171 @@
+<%- include('partials/header', { title }) %>
+<main class="layout single">
+  <section class="content">
+    <div class="card">
+      <h2>归档</h2>
+      <% if (day) { %>
+        <p class="meta">显示 <strong><%= day %></strong> 的文章。</p>
+        <% if (posts.length === 0) { %>
+          <p>当天暂无文章。</p>
+        <% } %>
+        <div class="post-list" style="margin-top: 16px;">
+          <% posts.forEach((post) => { %>
+            <article class="card">
+              <h2 class="post-title"><a href="/post/<%= post.slug %>"><%= post.title %></a></h2>
+              <p><%= post.excerpt %></p>
+              <div class="meta-line">
+                <span class="meta-item" title="发布时间：<%= post.created_at.slice(0, 10) %>">
+                  <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <path d="M12 7v6l4 2"></path>
+                  </svg>
+                  <span><%= post.created_at.slice(0, 10) %></span>
+                </span>
+                <span class="meta-item" title="分类：<%= post.category_name ? post.category_name : '无' %>">
+                  <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3 7h7l2 2h9v8a2 2 0 0 1-2 2H3z"></path>
+                    <path d="M3 7V5a2 2 0 0 1 2-2h4l2 2"></path>
+                  </svg>
+                </span>
+                <span class="meta-item" title="标签：<%= post.tags.length ? post.tags.map((tag) => tag.name).join('、') : '无' %>">
+                  <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 10V6a2 2 0 0 1 2-2h4"></path>
+                    <path d="M4 10l10 10 6-6L10 4H6a2 2 0 0 0-2 2z"></path>
+                  </svg>
+                </span>
+                <span class="meta-item" title="阅读 <%= post.read_count || 0 %>">
+                  <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <span><%= post.read_count || 0 %></span>
+                </span>
+                <span class="meta-item" title="评论 <%= post.comment_count || 0 %>">
+                  <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 5h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"></path>
+                  </svg>
+                  <span><%= post.comment_count || 0 %></span>
+                </span>
+                <span class="meta-item" title="点赞 <%= post.like_count || 0 %>">
+                  <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 21s-6.5-4.2-9-7.5A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9 7.5C18.5 16.8 12 21 12 21z"></path>
+                  </svg>
+                  <span><%= post.like_count || 0 %></span>
+                </span>
+                <span class="meta-item" title="收藏 <%= post.favorite_count || 0 %>">
+                  <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"></path>
+                  </svg>
+                  <span><%= post.favorite_count || 0 %></span>
+                </span>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="archive-calendar">
+          <% if (calendar) { %>
+            <div class="archive-month">
+              <div class="archive-month__header">
+                <div class="archive-month__title">
+                  <span class="archive-month__year"><%= calendar.year %></span>
+                  <span class="archive-month__unit">年</span>
+                  <span class="archive-month__month"><%= calendar.monthIndex %></span>
+                  <span class="archive-month__unit">月</span>
+                  <span class="archive-month__count">共 <%= activeMonthCount %> 篇</span>
+                </div>
+                <div class="archive-month__controls">
+                  <form class="archive-month__picker" method="get" action="/archive">
+                    <select name="month">
+                      <% monthOptions.forEach((item) => { %>
+                        <% const parts = item.monthKey.split('-'); %>
+                        <% const y = parts[0]; %>
+                        <% const m = Number(parts[1]); %>
+                        <option value="<%= item.monthKey %>" <%= item.monthKey === month ? 'selected' : '' %>>
+                          <%= y %>年<%= m %>月（<%= item.count %>）
+                        </option>
+                      <% }) %>
+                    </select>
+                    <button type="submit">跳转</button>
+                  </form>
+                  <div class="archive-month__nav">
+                    <% if (prevMonth) { %>
+                      <a class="archive-month__link" href="/archive?month=<%= prevMonth %>">上月</a>
+                    <% } else { %>
+                      <span class="archive-month__link is-disabled">上月</span>
+                    <% } %>
+                    <% if (nextMonth) { %>
+                      <a class="archive-month__link" href="/archive?month=<%= nextMonth %>">下月</a>
+                    <% } else { %>
+                      <span class="archive-month__link is-disabled">下月</span>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+              <div class="archive-weekdays">
+                <span>一</span>
+                <span>二</span>
+                <span>三</span>
+                <span>四</span>
+                <span>五</span>
+                <span>六</span>
+                <span>日</span>
+              </div>
+              <div class="archive-weeks">
+                <% calendar.weeks.forEach((week) => { %>
+                  <div class="archive-week">
+                    <% week.forEach((cell) => { %>
+                      <% if (!cell.day) { %>
+                        <div class="archive-day is-empty"></div>
+                      <% } else { %>
+                        <a class="archive-day" href="/archive?day=<%= cell.date %>">
+                          <span class="archive-day__num"><%= cell.day %></span>
+                          <% if (cell.count) { %>
+                            <span class="archive-day__count"><%= cell.count %></span>
+                          <% } %>
+                        </a>
+                      <% } %>
+                    <% }) %>
+                  </div>
+                <% }) %>
+              </div>
+            </div>
+          <% } else { %>
+            <div class="meta">暂无归档。</div>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="card" style="margin-top: 18px;">
+      <h3>分类</h3>
+      <% if (categories && categories.length) { %>
+        <div class="tag-cloud">
+          <% categories.forEach((category) => { %>
+            <a class="tag" href="/category/<%= category.slug %>">
+              <%= category.name %> (<%= category.post_count %>)
+            </a>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="meta">还没有分类。</div>
+      <% } %>
+    </div>
+
+    <div class="card" style="margin-top: 18px;">
+      <h3>标签</h3>
+      <% if (tags && tags.length) { %>
+        <div class="tag-cloud">
+          <% tags.forEach((tag) => { %>
+            <a class="tag" href="/tag/<%= tag.slug %>">
+              <%= tag.name %> (<%= tag.post_count %>)
+            </a>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="meta">还没有标签。</div>
+      <% } %>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>

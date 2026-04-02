@@ -1,0 +1,151 @@
+<%- include('partials/header', { title }) %>
+<main class="layout single">
+  <section class="content">
+    <article class="card">
+      <h2 class="post-title"><%= post.title %></h2>
+      <div class="card" id="post-content" style="margin-top: 16px;">
+        <%- post.html %>
+      </div>
+      <div class="meta" style="margin-top: 14px;">
+        <span>
+          分类：
+          <% if (post.category_name) { %>
+            <a href="/category/<%= post.category_slug %>"><%= post.category_name %></a>
+          <% } else { %>
+            无
+          <% } %>
+        </span>
+        <span>
+          标签：
+          <% if (post.tags.length === 0) { %>
+            无
+          <% } else { %>
+            <% post.tags.forEach((tag, index) => { %>
+              <a href="/tag/<%= tag.slug %>"><%= tag.name %></a><%= index < post.tags.length - 1 ? '、' : '' %>
+            <% }) %>
+          <% } %>
+        </span>
+      </div>
+      <div class="meta-line">
+        <span class="meta-item" title="发布时间：<%= post.created_at.slice(0, 10) %>">
+          <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M12 7v6l4 2"></path>
+          </svg>
+          <span><%= post.created_at.slice(0, 10) %></span>
+        </span>
+        <span class="meta-item" title="阅读 <%= post.read_count || 0 %>">
+          <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <span><%= post.read_count || 0 %></span>
+        </span>
+        <button class="icon-button" type="button" id="comment-toggle" title="评论">
+          <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 5h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"></path>
+          </svg>
+          <span><%= post.comment_count || 0 %></span>
+        </button>
+        <form action="/post/<%= post.slug %>/like" method="post">
+          <button class="icon-button" type="submit" title="点赞">
+            <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 21s-6.5-4.2-9-7.5A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9 7.5C18.5 16.8 12 21 12 21z"></path>
+            </svg>
+            <span><%= post.like_count || 0 %></span>
+          </button>
+        </form>
+        <form action="/post/<%= post.slug %>/favorite" method="post">
+          <button class="icon-button" type="submit" title="收藏">
+            <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"></path>
+            </svg>
+            <span><%= post.favorite_count || 0 %></span>
+          </button>
+        </form>
+      </div>
+    </article>
+
+    <section class="card" style="margin-top: 16px;">
+      <h3>评论</h3>
+      <% if (comments.length === 0) { %>
+        <p class="meta">还没有评论。</p>
+      <% } else { %>
+        <% comments.forEach((comment) => { %>
+          <div class="comment-item">
+            <div class="comment-header">
+              <strong><%= comment.author %></strong>
+              <span class="meta"><%= comment.created_at.slice(0, 10) %></span>
+            </div>
+            <div class="comment-body preview"><%- comment.html %></div>
+          </div>
+        <% }) %>
+      <% } %>
+    </section>
+  </section>
+</main>
+
+<div class="modal-overlay" id="comment-modal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="comment-title">
+    <div class="modal-header">
+      <h3 id="comment-title">评论</h3>
+      <button class="modal-close" type="button" id="comment-close">关闭</button>
+    </div>
+    <% if (success) { %>
+      <div class="notice">评论已提交，等待审核。</div>
+    <% } %>
+
+    <div class="card" style="margin-top: 18px;">
+      <h3>发表评论</h3>
+      <form class="admin-form comment-form" action="/post/<%= post.slug %>/comments" method="post">
+        <div class="field">
+          <label for="comment-author">姓名</label>
+          <input id="comment-author" type="text" name="author" placeholder="姓名" required />
+        </div>
+        <div class="field">
+          <label for="comment-email">邮箱（可选）</label>
+          <input id="comment-email" type="email" name="email" placeholder="邮箱（可选）" />
+        </div>
+        <div class="comment-editor">
+          <div class="comment-editor__pane">
+            <label for="comment-content">评论内容</label>
+            <textarea id="comment-content" name="content" rows="8" placeholder="评论内容" required></textarea>
+          </div>
+          <div class="comment-editor__pane">
+            <label for="comment-preview">预览</label>
+            <div id="comment-preview" class="preview comment-preview"></div>
+          </div>
+        </div>
+        <div class="meta">支持 Markdown 语法，例如 **加粗**、`code`、- 列表。</div>
+        <button class="primary" type="submit">提交</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="/static/vendor/marked.min.js"></script>
+<script src="/static/vendor/katex.min.js"></script>
+<script src="/static/vendor/katex-auto-render.min.js"></script>
+<script src="/static/vendor/highlight.min.js"></script>
+<script src="/static/js/content-enhance.js"></script>
+<script>
+  window.enhanceContent && window.enhanceContent(document.getElementById('post-content'));
+</script>
+<script>
+  (function () {
+    const input = document.getElementById('comment-content');
+    const preview = document.getElementById('comment-preview');
+    if (!input || !preview || !window.marked) {
+      return;
+    }
+    window.marked.setOptions({ breaks: true });
+    const render = () => {
+      const value = input.value || '';
+      preview.innerHTML = window.marked.parse(value);
+    };
+    input.addEventListener('input', render);
+    render();
+  })();
+</script>
+<script src="/static/js/comment-modal.js"></script>
+<%- include('partials/footer') %>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= title %> | 我的博客</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/vendor/katex.min.css" />
+    <link rel="stylesheet" href="/static/vendor/highlight.min.css" />
+  </head>
+  <body>
+    <div class="splash" id="splash">
+      <div class="splash-title">我的博客</div>
+    </div>
+    <header class="site-header">
+      <div class="container nav-bar">
+        <div class="brand">
+          <div class="brand-mark"></div>
+          <div>
+            <h1>我的博客</h1>
+            <div class="meta">清爽记录，温柔节奏。</div>
+          </div>
+        </div>
+        <nav class="site-nav">
+          <div class="nav-links">
+            <a href="/" class="<%= currentPath === '/' ? 'active' : '' %>"
+              >首页</a
+            >
+            <a
+              href="/archive"
+              class="<%= currentPath.startsWith('/archive') ? 'active' : '' %>"
+              >归档</a
+            >
+            <a
+              href="/about"
+              class="<%= currentPath.startsWith('/about') ? 'active' : '' %>"
+              >关于</a
+            >
+            <a
+              href="/admin"
+              class="<%= currentPath.startsWith('/admin') ? 'active' : '' %>"
+              >管理</a
+            >
+          </div>
+          <div class="nav-actions">
+            <button class="theme-toggle" id="theme-toggle" type="button">
+              深色
+            </button>
+            <button class="theme-toggle" id="layout-toggle" type="button">
+              列表：单列
+            </button>
+            <form class="search-form" action="/search" method="get">
+              <input
+                type="text"
+                name="q"
+                placeholder="搜索文章"
+                value="<%= typeof query !== 'undefined' ? query : '' %>"
+              />
+              <button type="submit">搜索</button>
+            </form>
+          </div>
+        </nav>
+      </div>
+    </header>

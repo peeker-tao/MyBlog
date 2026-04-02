@@ -1,0 +1,79 @@
+<%- include('../partials/header', { title }) %>
+<main class="layout single">
+  <section class="content">
+    <div class="card">
+      <h2>文章管理</h2>
+      <div class="button-row">
+        <a class="primary" href="/admin/posts/new">新建文章</a>
+        <form class="search-form" action="/admin" method="get" style="margin-left: auto;">
+          <input type="text" name="q" placeholder="搜索文章" value="<%= typeof query !== 'undefined' ? query : '' %>" />
+          <button type="submit">搜索</button>
+        </form>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>标题</th>
+            <th>日期</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (posts.length === 0) { %>
+            <tr>
+              <td colspan="3" class="meta">没有找到匹配的文章。</td>
+            </tr>
+          <% } %>
+          <% posts.forEach((post) => { %>
+            <tr>
+              <td><a href="/post/<%= post.slug %>"><%= post.title %></a></td>
+              <td><%= post.created_at.slice(0, 10) %></td>
+              <td>
+                <a href="/admin/posts/<%= post.id %>/edit">编辑</a>
+                <form action="/admin/posts/<%= post.id %>/delete" method="post" style="display: inline;">
+                  <button class="ghost" type="submit">删除</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top: 18px;">
+      <h2>待审核评论</h2>
+      <% if (pendingComments.length === 0) { %>
+        <p class="meta">暂无待审核评论。</p>
+      <% } else { %>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>文章</th>
+              <th>作者</th>
+              <th>评论</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% pendingComments.forEach((comment) => { %>
+              <tr>
+                <td><%= comment.post_title %></td>
+                <td><%= comment.author %></td>
+                <td><%= comment.content %></td>
+                <td>
+                  <form action="/admin/comments/<%= comment.id %>/approve" method="post" style="display: inline;">
+                    <button class="primary" type="submit">通过</button>
+                  </form>
+                  <form action="/admin/comments/<%= comment.id %>/delete" method="post" style="display: inline;">
+                    <button class="ghost" type="submit">删除</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </section>
+</main>
+<%- include('../partials/footer') %>
