@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/static/vendor/highlight.min.css" />
   </head>
   <body>
+    <% const navPath = typeof currentPath !== 'undefined' ? currentPath : ''; %>
     <div class="splash" id="splash">
       <div class="splash-title">我的博客</div>
     </div>
@@ -23,22 +24,20 @@
         </div>
         <nav class="site-nav">
           <div class="nav-links">
-            <a href="/" class="<%= currentPath === '/' ? 'active' : '' %>"
-              >首页</a
-            >
+            <a href="/" class="<%= navPath === '/' ? 'active' : '' %>">首页</a>
             <a
               href="/archive"
-              class="<%= currentPath.startsWith('/archive') ? 'active' : '' %>"
+              class="<%= navPath.startsWith('/archive') ? 'active' : '' %>"
               >归档</a
             >
             <a
               href="/about"
-              class="<%= currentPath.startsWith('/about') ? 'active' : '' %>"
+              class="<%= navPath.startsWith('/about') ? 'active' : '' %>"
               >关于</a
             >
             <a
               href="/admin"
-              class="<%= currentPath.startsWith('/admin') ? 'active' : '' %>"
+              class="<%= navPath.startsWith('/admin') ? 'active' : '' %>"
               >管理</a
             >
           </div>
@@ -62,3 +61,5 @@
         </nav>
       </div>
     </header>
+  </body>
+</html>

@@ -2,6 +2,7 @@
   const textarea = document.getElementById('content');
   const preview = document.getElementById('preview');
   const imageInput = document.getElementById('image-upload');
+  const markdownInput = document.getElementById('markdown-upload');
 
   if (!textarea || !preview || !window.marked) {
     return;
@@ -58,6 +59,25 @@
       } finally {
         imageInput.value = '';
       }
+    });
+  }
+
+  if (markdownInput) {
+    markdownInput.addEventListener('change', (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) {
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        textarea.value = reader.result || '';
+        render();
+      };
+      reader.onerror = () => {
+        alert('读取 Markdown 文件失败，请重试。');
+      };
+      reader.readAsText(file, 'utf-8');
+      markdownInput.value = '';
     });
   }
 })();
