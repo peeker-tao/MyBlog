@@ -30,3 +30,7 @@
 - 管理后台路由为 `/admin`，用于本地简单管理。
 - 全文搜索使用 SQLite FTS5。
 "# MyBlog" 
+
+
+# wodefa
+这里是为了测试 Copilot 的功能而创建的一个简单博客项目，使用 Node.js、Express、SQLite 和 EJS 构建。
