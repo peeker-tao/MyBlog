@@ -8,16 +8,20 @@ async function getOrCreateTag(name) {
   }
   const slug = toSlug(trimmed);
   const db = await getDb();
-  const existing = await db.get('SELECT * FROM tags WHERE slug = ?', slug);
+  let existing = await db.get('SELECT * FROM tags WHERE name = ?', trimmed);
+  if (!existing) {
+    existing = await db.get('SELECT * FROM tags WHERE slug = ?', slug);
+  }
   if (existing) {
     return existing;
   }
-  const result = await db.run(
-    'INSERT INTO tags (name, slug) VALUES (?, ?)',
+  await db.run(
+    'INSERT OR IGNORE INTO tags (name, slug) VALUES (?, ?)',
     trimmed,
     slug,
   );
-  return { id: result.lastID, name: trimmed, slug };
+  const created = await db.get('SELECT * FROM tags WHERE name = ?', trimmed);
+  return created || null;
 }
 
 async function listTagsWithCount() {

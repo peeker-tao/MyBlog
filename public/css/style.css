@@ -157,7 +157,31 @@ nav.site-nav {
 .nav-links a {
   padding: 6px 10px;
   border-radius: 999px;
-  transition: background 160ms ease, color 160ms ease;
+  transition:
+    background 160ms ease,
+    color 160ms ease;
+}
+
+/* nav underline animation */
+.nav-links a {
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: -4px;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 220ms cubic-bezier(0.2, 0.9, 0.2, 1);
+  border-radius: 2px;
+  opacity: 0.9;
+}
+.nav-links a:hover::after {
+  transform: scaleX(1);
 }
 
 .nav-links a.active {
@@ -232,6 +256,13 @@ main.layout.single {
   animation: cardRise 420ms ease-out forwards;
 }
 
+/* 更轻微的悬停阴影效果用于文章卡片 */
+.post-list .card:hover,
+.card:hover {
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+  transform: translateY(-4px);
+}
+
 .card:nth-child(1) {
   animation-delay: 60ms;
 }
@@ -258,7 +289,11 @@ main.layout.single {
   border: 1px solid var(--line);
   border-radius: 18px;
   padding: 16px 18px 14px;
-  background: linear-gradient(160deg, rgba(79, 138, 139, 0.08), rgba(79, 138, 139, 0.02));
+  background: linear-gradient(
+    160deg,
+    rgba(79, 138, 139, 0.08),
+    rgba(79, 138, 139, 0.02)
+  );
 }
 
 .archive-month__header {
@@ -381,7 +416,10 @@ main.layout.single {
   border: 1px solid transparent;
   background: rgba(255, 255, 255, 0.6);
   color: var(--ink);
-  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    border-color 160ms ease;
 }
 
 html[data-theme='dark'] .archive-day {
@@ -544,6 +582,55 @@ label.button.ghost {
   margin-top: 0;
 }
 
+.recent-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.recent-list li {
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.recent-list li:last-child {
+  border-bottom: none;
+}
+
+.read-more {
+  display: inline-block;
+  margin-top: 10px;
+  background: transparent;
+  color: var(--accent);
+  border-radius: 8px;
+  padding: 6px 10px;
+  text-decoration: none;
+  font-weight: 600;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    transform 120ms ease;
+}
+.read-more:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.footer-right .social-link {
+  margin-left: 8px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+.footer-right .social-link:hover {
+  color: var(--accent);
+}
+
 footer.site-footer {
   padding: 30px 0 50px;
   color: var(--muted);
@@ -608,6 +695,33 @@ footer.site-footer {
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+}
+
+.editor-toolbar .button.ghost {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+}
+
+.editor-toolbar .tool-icon {
+  min-width: 36px;
+  height: 32px;
+  padding: 0 8px;
+  justify-content: center;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.editor-toolbar .tool-icon__svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.6;
+}
+
+.editor-toolbar .tool-icon__text {
+  font-size: 0.85rem;
+  line-height: 1;
 }
 
 .editor-panel-title {

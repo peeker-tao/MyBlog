@@ -1,5 +1,26 @@
 <aside class="sidebar">
   <div class="card">
+    <h3>搜索</h3>
+    <form class="search-form" action="/search" method="get">
+      <input type="text" name="q" placeholder="搜索文章" />
+      <button type="submit">搜索</button>
+    </form>
+  </div>
+
+  <div class="card" style="margin-top: 18px;">
+    <h3>近期文章</h3>
+    <% if (recentPosts && recentPosts.length) { %>
+      <ul class="recent-list">
+        <% recentPosts.forEach((p) => { %>
+          <li><a href="/post/<%= p.slug %>"><%= p.title %></a></li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <div class="meta">暂无文章。</div>
+    <% } %>
+  </div>
+
+  <div class="card" style="margin-top: 18px;">
     <h3>分类</h3>
     <% if (categories && categories.length) { %>
       <div class="tag-cloud">

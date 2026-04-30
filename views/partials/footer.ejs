@@ -1,6 +1,13 @@
   <% const footerYear = typeof year !== 'undefined' ? year : new Date().getFullYear(); %>
   <footer class="site-footer">
-    <div class="container">&copy; <%= footerYear %> 我的博客</div>
+    <div class="container footer-inner">
+      <div class="footer-left">&copy; <%= footerYear %> 我的博客</div>
+      <div class="footer-right">
+        <a href="#" title="GitHub" class="social-link">GitHub</a>
+        <a href="#" title="Twitter" class="social-link">Twitter</a>
+        <a href="#" title="微信" class="social-link">微信</a>
+      </div>
+    </div>
   </footer>
   <script src="/static/js/theme.js"></script>
   <script src="/static/js/layout.js"></script>

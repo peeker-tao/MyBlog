@@ -1,5 +1,5 @@
 <%- include('partials/header', { title, query }) %>
-<main class="layout single">
+<main class="layout">
   <section class="content">
     <div class="card">
       <h2>搜索</h2>
@@ -12,10 +12,12 @@
           <div style="margin: 12px 0;">
             <a href="/post/<%= post.slug %>"><%= post.title %></a>
             <div class="meta"><%= post.excerpt %></div>
+            <div><a class="read-more" href="/post/<%= post.slug %>">阅读更多 →</a></div>
           </div>
         <% }) %>
       <% } %>
     </div>
   </section>
+  <%- include('partials/sidebar') %>
 </main>
 <%- include('partials/footer') %>

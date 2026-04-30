@@ -29,4 +29,16 @@
 
 - 管理后台路由为 `/admin`，用于本地简单管理。
 - 全文搜索使用 SQLite FTS5。
-"# MyBlog" 
+"# MyBlog"
+
+## 用例图
+
+![alt text](实验报告/用例图.png)
+
+## 系统架构图
+
+![alt text](实验报告/系统架构图.png)
+
+## 数据库ER图
+
+![alt text](实验报告/数据库ER图.png)

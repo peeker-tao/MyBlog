@@ -4,6 +4,7 @@ const express = require('express');
 const multer = require('multer');
 const postModel = require('../models/postModel');
 const commentModel = require('../models/commentModel');
+const categoryModel = require('../models/categoryModel');
 
 const router = express.Router();
 
@@ -33,15 +34,18 @@ router.get('/', async (req, res, next) => {
   try {
     const query = (req.query.q || '').trim();
     const postsPromise = query
-      ? postModel.searchPosts(query)
-      : postModel.listPosts();
+      ? postModel.searchAllPosts(query)
+      : postModel.listAllPosts();
     const [posts, pendingComments] = await Promise.all([
       postsPromise,
       commentModel.listPending(),
     ]);
+    const drafts = posts.filter((post) => post.status === 'draft');
+    const publishedPosts = posts.filter((post) => post.status !== 'draft');
     res.render('admin/index', {
       title: '管理',
-      posts,
+      drafts,
+      publishedPosts,
       pendingComments,
       query,
     });
@@ -50,21 +54,35 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/posts/new', (req, res) => {
-  res.render('admin/new', { title: '新建文章' });
+router.get('/posts/new', async (req, res, next) => {
+  try {
+    const categories = await categoryModel.listCategories();
+    res.render('admin/new', { title: '新建文章', categories });
+  } catch (err) {
+    next(err);
+  }
 });
 
-router.post('/uploads', upload.single('image'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: 'no file' });
-  }
-  const url = `/static/uploads/${req.file.filename}`;
-  return res.json({ url });
+// 上传图片，支持超大文件 413 错误处理
+router.post('/uploads', (req, res, next) => {
+  upload.single('image')(req, res, function (err) {
+    if (err && err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(413).json({ error: '文件过大' });
+    } else if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+    if (!req.file) {
+      return res.status(400).json({ error: 'no file' });
+    }
+    const url = `/static/uploads/${req.file.filename}`;
+    return res.json({ url });
+  });
 });
 
 router.post('/posts', async (req, res, next) => {
   try {
-    const { title, content, category, tags } = req.body;
+    const { title, content, category, category_custom, tags, action } =
+      req.body;
     if (!title || !content) {
       return res.status(400).render('error', {
         title: '缺少必填项',
@@ -72,11 +90,17 @@ router.post('/posts', async (req, res, next) => {
       });
     }
     const tagsArray = tags ? tags.split(',') : [];
+    const status = action === 'draft' ? 'draft' : 'published';
+    const categoryName =
+      category_custom && category_custom.trim()
+        ? category_custom.trim()
+        : category;
     await postModel.createPost({
       title,
       content,
-      categoryName: category,
+      categoryName,
       tags: tagsArray,
+      status,
     });
     res.redirect('/admin');
   } catch (err) {
@@ -93,7 +117,8 @@ router.get('/posts/:id/edit', async (req, res, next) => {
         .render('error', { title: '未找到', message: '文章未找到。' });
     }
     const tagList = post.tags.map((tag) => tag.name).join(', ');
-    res.render('admin/edit', { title: '编辑文章', post, tagList });
+    const categories = await categoryModel.listCategories();
+    res.render('admin/edit', { title: '编辑文章', post, tagList, categories });
   } catch (err) {
     next(err);
   }
@@ -101,7 +126,8 @@ router.get('/posts/:id/edit', async (req, res, next) => {
 
 router.post('/posts/:id', async (req, res, next) => {
   try {
-    const { title, content, category, tags } = req.body;
+    const { title, content, category, category_custom, tags, action } =
+      req.body;
     if (!title || !content) {
       return res.status(400).render('error', {
         title: '缺少必填项',
@@ -109,11 +135,17 @@ router.post('/posts/:id', async (req, res, next) => {
       });
     }
     const tagsArray = tags ? tags.split(',') : [];
+    const status = action === 'draft' ? 'draft' : 'published';
+    const categoryName =
+      category_custom && category_custom.trim()
+        ? category_custom.trim()
+        : category;
     await postModel.updatePost(req.params.id, {
       title,
       content,
-      categoryName: category,
+      categoryName,
       tags: tagsArray,
+      status,
     });
     res.redirect('/admin');
   } catch (err) {

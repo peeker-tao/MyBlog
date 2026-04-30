@@ -11,7 +11,15 @@
         <div class="field-row">
           <div class="field">
             <label for="category">分类</label>
-            <input id="category" type="text" name="category" placeholder="例如：随笔" />
+            <select id="category" name="category">
+              <option value="">-- 选择分类（或填写自定义） --</option>
+              <% if (categories && categories.length) { %>
+                <% categories.forEach((c) => { %>
+                  <option value="<%= c.name %>"><%= c.name %> (<%= c.post_count %>)</option>
+                <% }) %>
+              <% } %>
+            </select>
+            <input id="category_custom" type="text" name="category_custom" placeholder="自定义分类（可选）" style="margin-top:8px;" />
           </div>
           <div class="field">
             <label for="tags">标签</label>
@@ -23,10 +31,98 @@
         <div class="editor-shell">
           <div class="editor-panel-title">正文（Markdown）</div>
           <div class="editor-toolbar">
-            <label class="button ghost" for="image-upload">插入图片</label>
+            <button class="button ghost tool-icon" type="button" data-md="bold" title="加粗" aria-label="加粗">
+              <svg class="tool-icon__svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 5h7a4 4 0 0 1 0 8H7z"></path>
+                <path d="M7 13h8a4 4 0 0 1 0 8H7z"></path>
+              </svg>
+            </button>
+            <button class="button ghost tool-icon" type="button" data-md="italic" title="斜体" aria-label="斜体">
+              <svg class="tool-icon__svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M19 4h-9"></path>
+                <path d="M14 20H5"></path>
+                <path d="M15 4l-6 16"></path>
+              </svg>
+            </button>
+            <button class="button ghost tool-icon" type="button" data-md="h2" title="标题" aria-label="标题">
+              <svg class="tool-icon__svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 6v12"></path>
+                <path d="M4 12h8"></path>
+                <path d="M12 6v12"></path>
+                <path d="M16 12h4"></path>
+              </svg>
+            </button>
+            <button class="button ghost tool-icon" type="button" data-md="quote" title="引用" aria-label="引用">
+              <svg class="tool-icon__svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 7h6v6H7z"></path>
+                <path d="M11 7h6v6h-6z"></path>
+              </svg>
+            </button>
+            <button class="button ghost tool-icon" type="button" data-md="ul" title="无序列表" aria-label="无序列表">
+              <svg class="tool-icon__svg" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="5" cy="7" r="1.5"></circle>
+                <circle cx="5" cy="12" r="1.5"></circle>
+                <circle cx="5" cy="17" r="1.5"></circle>
+                <path d="M9 7h10"></path>
+                <path d="M9 12h10"></path>
+                <path d="M9 17h10"></path>
+              </svg>
+            </button>
+            <button class="button ghost tool-icon" type="button" data-md="ol" title="有序列表" aria-label="有序列表">
+              <svg class="tool-icon__svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 6h2"></path>
+                <path d="M4 11h2"></path>
+                <path d="M4 16h2"></path>
+                <path d="M9 7h10"></path>
+                <path d="M9 12h10"></path>
+                <path d="M9 17h10"></path>
+              </svg>
+            </button>
+            <button class="button ghost tool-icon" type="button" data-md="link" title="链接" aria-label="链接">
+              <svg class="tool-icon__svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M10 14a4 4 0 0 1 0-6l2-2a4 4 0 0 1 6 6l-1 1"></path>
+                <path d="M14 10a4 4 0 0 1 0 6l-2 2a4 4 0 0 1-6-6l1-1"></path>
+              </svg>
+            </button>
+            <label class="button ghost tool-icon" for="image-upload" title="插入图片" aria-label="插入图片">
+              <svg class="tool-icon__svg" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                <circle cx="9" cy="10" r="2"></circle>
+                <path d="M21 16l-5-5-5 6-3-3-5 5"></path>
+              </svg>
+            </label>
             <input id="image-upload" type="file" accept="image/*" hidden />
-            <label class="button ghost" for="markdown-upload">导入 .md</label>
+            <label class="button ghost tool-icon" for="markdown-upload" title="导入 .md" aria-label="导入 .md">
+              <svg class="tool-icon__svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M14 3h-7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path>
+                <path d="M14 3v5h5"></path>
+              </svg>
+            </label>
             <input id="markdown-upload" type="file" accept=".md,text/markdown" hidden />
+            <button class="button ghost tool-icon" type="button" data-md="strike" title="删除线" aria-label="删除线">
+              <svg class="tool-icon__svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h16"></path>
+                <path d="M8 5c1-1 3-1 4-1 3 0 5 1 5 3"></path>
+                <path d="M7 19c1 1 3 1 5 1 3 0 5-1 5-3"></path>
+              </svg>
+            </button>
+            <button class="button ghost tool-icon" type="button" data-md="code" title="行内代码" aria-label="行内代码">
+              <svg class="tool-icon__svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8 9l-4 3 4 3"></path>
+                <path d="M16 9l4 3-4 3"></path>
+              </svg>
+            </button>
+            <button class="button ghost tool-icon" type="button" data-md="codeblock" title="代码块" aria-label="代码块">
+              <svg class="tool-icon__svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 6l-5 6 5 6"></path>
+                <path d="M15 6l5 6-5 6"></path>
+              </svg>
+            </button>
+            <button class="button ghost tool-icon" type="button" data-md="hr" title="分割线" aria-label="分割线">
+              <svg class="tool-icon__svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h16"></path>
+              </svg>
+            </button>
             <span class="meta">支持拖拽或选择图片，自动生成 Markdown</span>
           </div>
           <div class="editor compact">
@@ -34,7 +130,14 @@
             <div class="preview" id="preview"></div>
           </div>
         </div>
-        <button class="primary" type="submit">发布</button>
+        <div class="button-row">
+          <button class="button ghost" type="submit" name="action" value="draft">保存草稿</button>
+          <button class="primary" type="submit" name="action" value="publish">发布</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3 class="admin-section-title">草稿说明</h3>
+        <div class="meta">保存草稿后不会在首页显示，可在管理页“草稿列表”中继续编辑并发布。</div>
       </div>
     </form>
   </section>

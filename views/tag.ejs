@@ -1,5 +1,5 @@
 <%- include('partials/header', { title }) %>
-<main class="layout single">
+<main class="layout">
   <section class="content">
     <div class="card" style="margin-bottom: 18px;">
       <h2>标签：<%= tag.name %></h2>
@@ -12,6 +12,7 @@
         <article class="card">
           <h2 class="post-title"><a href="/post/<%= post.slug %>"><%= post.title %></a></h2>
           <p><%= post.excerpt %></p>
+          <a class="read-more" href="/post/<%= post.slug %>">阅读更多 →</a>
           <div class="meta-line">
             <span class="meta-item" title="发布时间：<%= post.created_at.slice(0, 10) %>">
               <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -62,5 +63,6 @@
       <% }) %>
     </div>
   </section>
+  <%- include('partials/sidebar') %>
 </main>
 <%- include('partials/footer') %>

@@ -5,11 +5,24 @@ const targetDir = path.join(__dirname, '..', 'public', 'vendor');
 
 const assets = [
   {
-    source: path.join(__dirname, '..', 'node_modules', 'marked', 'marked.min.js'),
+    source: path.join(
+      __dirname,
+      '..',
+      'node_modules',
+      'marked',
+      'marked.min.js',
+    ),
     target: path.join(targetDir, 'marked.min.js'),
   },
   {
-    source: path.join(__dirname, '..', 'node_modules', 'katex', 'dist', 'katex.min.js'),
+    source: path.join(
+      __dirname,
+      '..',
+      'node_modules',
+      'katex',
+      'dist',
+      'katex.min.js',
+    ),
     target: path.join(targetDir, 'katex.min.js'),
   },
   {
@@ -25,7 +38,14 @@ const assets = [
     target: path.join(targetDir, 'katex-auto-render.min.js'),
   },
   {
-    source: path.join(__dirname, '..', 'node_modules', 'katex', 'dist', 'katex.min.css'),
+    source: path.join(
+      __dirname,
+      '..',
+      'node_modules',
+      'katex',
+      'dist',
+      'katex.min.css',
+    ),
     target: path.join(targetDir, 'katex.min.css'),
   },
   {
