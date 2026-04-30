@@ -3,3 +3,7 @@ node_modules/
 *.log
 .DS_Store
 /db/blog.db
+*.txt
+*.docx
+*.mp4
+*.zip
